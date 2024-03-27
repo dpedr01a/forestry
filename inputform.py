@@ -14,12 +14,11 @@ VARIABLES = [
 
 
 class MyScrollableFrame(ctk.CTkScrollableFrame):
-    def __init__(self, master, title, fonts, dims, variables):
-        super().__init__(master, width=1200, height=500, label_text=title, label_font=fonts)
+    def __init__(self, master, title, fonts, dims):
+        super().__init__(master, width=100, height=500, label_text=title, label_font=fonts)
         self.fonts = fonts
         self.grid_columnconfigure(0, weight=1)
         self.dims = dims
-        self.variables = variables
         self.create_widgets()
 
     def create_widgets(self):
@@ -27,15 +26,11 @@ class MyScrollableFrame(ctk.CTkScrollableFrame):
             land_label = ctk.CTkLabel(master=self, text=dim, font=self.fonts)
             land_label.grid(row=k+1, column=0, padx=10, pady=(10,0), sticky="w")
 
-        for k, var in enumerate(self.variables):
-            type_label = ctk.CTkLabel(master=self, text=var, font=self.fonts)
-            type_label.grid(row=0, column=k+1, padx=10, pady=(10,0), sticky="w")
-
         self.textboxes = []
         for i in range(len(self.variables)):
             row_textboxes = []
             for j in range(len(self.dims)):
-                textbox = ctk.CTkEntry(master=self, width=100, font=self.fonts)
+                textbox = ctk.CTkEntry(master=self, width=50, font=self.fonts)
                 textbox.grid(row=j+1, column=i+1, padx=10, pady=(10,0), sticky="w")
                 textbox.insert(0, 60)  # Default value
                 row_textboxes.append(textbox)
@@ -54,7 +49,7 @@ class App(ctk.CTk):
         ctk.set_default_color_theme("blue")
 
         dims = self.read_dims(DIM_DIR)
-        self.scrollable_frame = MyScrollableFrame(self, title='施業体系パラメータ設定', fonts=self.fonts, dims=dims, variables=VARIABLES)
+        self.scrollable_frame = MyScrollableFrame(self, title='植栽密度()', fonts=self.fonts, dims=dims, variables=VARIABLES)
         self.scrollable_frame.grid(row=0, column=0, padx=10, pady=(10,0), sticky='nsew')
 
         self.button = ctk.CTkButton(master=self, text="csv出力", command=self.button_function, font=self.fonts)
